@@ -1,14 +1,15 @@
 package com.dktechhub.retexter
 
 
+
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,9 +19,12 @@ import com.dktechhub.retexter.databinding.ActivityTextRepeaterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
-class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
-    lateinit var viewModel:TextRepetorViewModel;
+class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterView.OnItemClickListener {
+    lateinit var viewModel:TextRepetorViewModel
     lateinit var dialog: BottomSheetDialog
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val textRepeaterBinding:ActivityTextRepeaterBinding = DataBindingUtil.setContentView(this,R.layout.activity_text_repeater)
@@ -32,18 +36,37 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
         val share =findViewById<Button>(R.id.button2)
         val style =findViewById<Button>(R.id.button3)
         val rep =findViewById<Button>(R.id.button4)
-        val newLine =findViewById<CheckBox>(R.id.ckb)
-        val inp =findViewById<EditText>(R.id.editTextText)
-        val cnt =findViewById<EditText>(R.id.editTextNumber)
+
         dialog = BottomSheetDialog(this)
         dialog.setContentView(R.layout.activity_list_item)
+        val listView = dialog.findViewById<View>(R.id.listViewBtmSheet) as BottomSheetListView?
+        val arr: ArrayAdapter<String> = ArrayAdapter<String>(
+            this,
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+            viewModel.arr
+        )
+        //arr.se
+        if (listView != null) {
+            listView.adapter=arr
+            listView.onItemClickListener=this
+        }
+
+
+        viewModel.load.observe(this) {
+            if (it) {
+                arr.clear()
+                arr.addAll(viewModel.arr)
+                viewModel.load.value = false
+            }
+        }
+
 
 
         viewModel.finalRes.observe(this) {
            // fin_t.text = it
             cp.isEnabled= it.isNotEmpty()
             share.isEnabled=it.isNotEmpty()
-            style.isEnabled=it.isNotEmpty()
+
             fin_t.text = it
         }
 
@@ -56,6 +79,7 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
 
         viewModel.str.observe(this) {
             rep.isEnabled = it.isNotEmpty()&& viewModel.cnt.value!! >0
+            style.isEnabled=it.isNotEmpty()
             //inp.setText(it)
         }
         //inp.addTextChangedListener(onTextChanged = { charSequence: CharSequence?, i: Int, i1: Int, i2: Int -> if(viewModel.str.value!=charSequence.toString()){viewModel.str.value=charSequence.toString()} } )
@@ -68,16 +92,7 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
 
     }
 
-    private fun validate(charSequence: CharSequence?) {
-    try {
-        if(viewModel.cnt.value!=charSequence.toString().toInt())
-            viewModel.cnt.value=charSequence.toString().toInt()
-    }catch (_:Exception)
-    {
-        Toast.makeText(this,"Input error",Toast.LENGTH_SHORT).show()
-    }
 
-    }
 
 
 
@@ -102,7 +117,7 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
         val id= v?.id
         when(id)
         {
-            R.id.button4->viewModel.repeat()
+            R.id.button4-> viewModel.str.value?.let { viewModel.repeat(it) }
             R.id.button->copyToClipboard()
             R.id.button2->shareText()
             R.id.button3->showStyles()
@@ -112,13 +127,21 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener {
 
     fun showStyles()
     {
-        //val sheet= ModelBottom
+        viewModel.refreshStyle()
 
-        //val listView = dialog.findViewById<View>(R.id.listViewBtmSheet) as BottomSheetListView?
-// apply some adapter - add some data to listview
-
-// apply some adapter - add some data to listview
         dialog.show()
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (parent != null) {
+           val s= parent.adapter.getItem(position) as String
+            //viewModel.str.value=s
+            dialog.hide()
+            if(s.isNotEmpty()&& viewModel.cnt.value!! >0)
+            {
+                viewModel.repeat(s)
+            }
+        }
     }
 
 

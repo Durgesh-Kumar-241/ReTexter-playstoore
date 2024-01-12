@@ -3,16 +3,38 @@ package com.dktechhub.retexter
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.util.Collections.replaceAll
+import java.util.Collections.replaceAll
+import kotlin.coroutines.CoroutineContext
 
-class TextRepetorViewModel : ViewModel() {
+
+class TextRepetorViewModel : ViewModel(),mCallback {
+
+
+
     var finalRes= MutableLiveData("")
     var str=MutableLiveData("")
     var nln=false
     val cnt=MutableLiveData(10)
-    fun repeat()
+    var stCurr =""
+    val textUtils=TextUtils()
+    val load = MutableLiveData(false)
+
+      var arr=  arrayListOf("Algorithms", "Data Structures",
+            "Languages", "Interview Corner",
+            "GATE", "ISRO CS",
+            "UGC NET CS", "CS Subjects",
+            "Web Technologies")
+
+    fun repeat(string: String)
     {
         val sb = StringBuilder()
-        var t2=str.value
+        var t2=string
         t2 += if(nln) {
             "\n"
         }else " "
@@ -21,12 +43,40 @@ class TextRepetorViewModel : ViewModel() {
         while (x!!>0)
         {
         sb.append(t2)
-        x--;
+        x--
         }
 
         finalRes.value=sb.toString()
         Log.d("xxx0",finalRes.value.toString())
         sb.clear()
+        //AppConstants
 
     }
+
+    fun refreshStyle()
+    {
+        if(str.value!=stCurr&&str.value!=null)
+        {
+            stCurr=str.value!!
+            viewModelScope.launch(Dispatchers.IO) { applyStyle(stCurr,this@TextRepetorViewModel) }
+        }
+    }
+
+
+
+    private fun applyStyle(string: String, mCallback: mCallback)
+    {
+        viewModelScope.launch(Dispatchers.Main) { mCallback.onLoaded(textUtils.applyStyle(string)) }
+    }
+
+    override fun onLoaded(all: ArrayList<String>) {
+        this.arr=all
+        load.value=true
+    }
+
+
+}
+
+interface mCallback{
+    fun onLoaded( all:ArrayList<String>)
 }

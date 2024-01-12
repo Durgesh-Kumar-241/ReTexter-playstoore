@@ -68,7 +68,9 @@
                         android:id="@+id/fin_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.finalRes}" />
+                        android:selectAllOnFocus="true"
+                        android:text="@{viewModel.finalRes}"
+                        android:textIsSelectable="true" />
                 </LinearLayout>
             </ScrollView>
 
