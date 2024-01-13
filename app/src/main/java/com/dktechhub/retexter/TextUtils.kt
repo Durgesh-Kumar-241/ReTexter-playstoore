@@ -1305,7 +1305,7 @@ class TextUtils {
 
 
 
-       val colors = arrayListOf(str,
+       val colors = arrayListOf(str,Love,Next,
            Circled,
             f9629B7,
             Bold,
