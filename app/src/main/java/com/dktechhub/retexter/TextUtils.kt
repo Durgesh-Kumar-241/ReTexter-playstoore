@@ -1309,6 +1309,7 @@ class TextUtils {
            Circled,
             f9629B7,
             Bold,
+            Box1,
             A24,
             f9630B8, A22, Superscript, Double, A20, Dark, Font8, Box5, Subscript, f9621A8, A21, Squared, f9615A2,  Criss, Wave, f9616A3, f9617A4, f9619A6, f9625B3, A10, Greek, Box2, Stroked, f9614A1, Chain, Japanese, Dollar, Underline, Box4, Barbed, Barbed2, Link, Crisscross, f9623B1, f9624B2, f9626B4, f9627B5, f9628B6, f9631B9, B10, f9622A9, A11, A13, A14, A15, A16, A17, A19, A23, A25, Mirrored, Mirror, Font9, Parenthesized, Wiggly, Power, Glitch, Cjk, Font2, Rock, Font4, A18, f9618A5, Funky8, Curly, Font5, Hourglass, Yoda, Delta, Oriental, Orthodox, f9620A7, Inverted, Funky1, Box3, Funky2, Underline2, Funky3, Funky6, Funky7, Diamond, Dot, Font7, Stingy, Tick, Font3, Narrow, Curvy3, Diametric, Slim, Funky4, Funky5, Funky9, Fahrenheit, Font6, Wisdom, Chess, Fancee, Triangle, Happy, Sad, Infinity, Emoji, Tilda,replace)
 
