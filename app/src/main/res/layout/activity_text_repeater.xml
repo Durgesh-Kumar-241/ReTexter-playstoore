@@ -21,7 +21,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        app:cardBackgroundColor="#81C784"
+        app:cardBackgroundColor="?attr/colorOnPrimary"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
                 android:drawableLeft="@drawable/copy_svgrepo_com__1_"
-                android:text="Copy to Clipboard"
+                android:text="Copy"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button2"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -68,7 +68,7 @@
                         android:id="@+id/fin_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:selectAllOnFocus="true"
+                        android:selectAllOnFocus="false"
                         android:text="@{viewModel.finalRes}"
                         android:textIsSelectable="true" />
                 </LinearLayout>
