@@ -20,18 +20,18 @@ class TextRepetorViewModel : ViewModel(),mCallback {
     var finalRes= MutableLiveData("")
     var str=MutableLiveData("")
     var nln=false
-    val cnt=MutableLiveData(10)
+    val cnt=MutableLiveData(1)
     var stCurr =""
     val textUtils=TextUtils()
     val load = MutableLiveData(false)
 
-      var arr=  arrayListOf("Algorithms", "Data Structures",
-            "Languages", "Interview Corner",
-            "GATE", "ISRO CS",
-            "UGC NET CS", "CS Subjects",
-            "Web Technologies")
+      var arr=  ArrayList<String>()
 
     fun repeat(string: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) { repeat_back(string) }
+    }
+    suspend fun repeat_back(string: String)
     {
         val sb = StringBuilder()
         var t2=string
@@ -46,10 +46,10 @@ class TextRepetorViewModel : ViewModel(),mCallback {
         x--
         }
 
-        finalRes.value=sb.toString()
-        Log.d("xxx0",finalRes.value.toString())
-        sb.clear()
-        //AppConstants
+        viewModelScope.launch(Dispatchers.Main) { finalRes.value=sb.toString() ; sb.clear() }
+
+        //sb.clear()
+
 
     }
 
@@ -74,9 +74,15 @@ class TextRepetorViewModel : ViewModel(),mCallback {
         load.value=true
     }
 
+    fun reset(){
+        finalRes.value=""
+        //cnt.value=1
+        //str.value=""
+    }
 
 }
 
 interface mCallback{
     fun onLoaded( all:ArrayList<String>)
+
 }

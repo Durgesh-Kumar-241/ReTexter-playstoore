@@ -5,6 +5,7 @@ package com.dktechhub.retexter
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -36,6 +37,7 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterVie
         val share =findViewById<Button>(R.id.button2)
         val style =findViewById<Button>(R.id.button3)
         val rep =findViewById<Button>(R.id.button4)
+        val reset = findViewById<Button>(R.id.btn_reset)
 
         dialog = BottomSheetDialog(this)
         dialog.setContentView(R.layout.activity_list_item)
@@ -75,6 +77,8 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterVie
         rep.setOnClickListener(this)
         style.setOnClickListener (this)
 
+        reset.setOnClickListener(this)
+
 
 
         viewModel.str.observe(this) {
@@ -102,7 +106,8 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterVie
         val clipData =
             ClipData.newPlainText("text", viewModel.finalRes.value)
         clipboardManager.setPrimaryClip(clipData)
-        //Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.S_V2)
+            Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     fun shareText() {
@@ -117,12 +122,35 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterVie
         val id= v?.id
         when(id)
         {
-            R.id.button4-> viewModel.str.value?.let { viewModel.repeat(it) }
+            R.id.button4-> viewModel.str.value?.let {
+                if(validateInputs())
+                {
+                    Toast.makeText(this,"Please wait...",Toast.LENGTH_SHORT).show()
+                    viewModel.repeat(it)
+                }
+            }
             R.id.button->copyToClipboard()
             R.id.button2->shareText()
             R.id.button3->showStyles()
+            R.id.btn_reset->{viewModel.reset()}
         }
 
+    }
+
+    fun validateInputs():Boolean
+    {
+
+
+        return if(viewModel.cnt.value!! <=10000&& viewModel.cnt.value!! >0&&viewModel.str.value!=null) {
+            if(viewModel.cnt.value!! >8000&& viewModel.str.value!!.length >15)
+            {
+                Toast.makeText(this,"Input size is large,application may freeze for some time",Toast.LENGTH_SHORT).show()
+            }
+            true
+        }else{
+            Toast.makeText(this,"Repetition count should be in range 1-10k",Toast.LENGTH_SHORT).show()
+            false
+        }
     }
 
     fun showStyles()
@@ -137,8 +165,9 @@ class TextRepeaterActivity : AppCompatActivity(),View.OnClickListener,AdapterVie
            val s= parent.adapter.getItem(position) as String
             //viewModel.str.value=s
             dialog.hide()
-            if(s.isNotEmpty()&& viewModel.cnt.value!! >0)
+            if(s.isNotEmpty()&& viewModel.cnt.value!! >0&&validateInputs())
             {
+                Toast.makeText(this,"Please wait...",Toast.LENGTH_SHORT).show()
                 viewModel.repeat(s)
             }
         }
