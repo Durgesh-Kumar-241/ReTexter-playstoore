@@ -59,8 +59,12 @@ Download directly from the Google Play Store:
 
 <!-- Add screenshots here -->
 <!-- Example:
-![Screenshot 1](screenshots/screen1.png)
-![Screenshot 2](screenshots/screen2.png)
+![Screenshot 1](screenshots/retext1.webp)
+![Screenshot 2](screenshots/retext2.webp)
+![Screenshot 3](screenshots/retext3.webp)
+![Screenshot 4](screenshots/retext4.webp)
+![Screenshot 5](screenshots/retext5.webp)
+![Screenshot 6](screenshots/retext6.webp)
 -->
 
 ---
