@@ -38,8 +38,6 @@ All processing happens **locally on your device** — no internet, no data colle
 - ✅ No third-party SDKs
 - ✅ Safe for children under 13
 
-Read the full **Privacy Policy** here:  
-👉 *[Add your GitHub Pages privacy policy link]*
 
 ---
 
@@ -59,7 +57,7 @@ Download directly from the Google Play Store:
 
 <!-- Add screenshots here -->
 <!-- Example:
-![Screenshot 1](screenshots/retext1.webp)
+![](screenshots/retext1.webp)
 ![Screenshot 2](screenshots/retext2.webp)
 ![Screenshot 3](screenshots/retext3.webp)
 ![Screenshot 4](screenshots/retext4.webp)
